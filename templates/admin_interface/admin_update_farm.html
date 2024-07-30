@@ -1,0 +1,107 @@
+{% extends "base/base.html" %}
+
+{% block custom_css %}
+<style>
+    .form-container {
+    width: 80%;
+    margin: 0 auto;
+}
+
+.update-farm-form {
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    font-weight: bold;
+}
+
+.form-group input[type="text"],
+.form-group textarea,
+.form-group input[type="date"] {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.form-group input[type="file"] {
+    display: block;
+    margin-top: 5px;
+}
+
+button[type="submit"] {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+button[type="submit"]:hover {
+    background-color: #0056b3;
+}
+
+</style>
+{% endblock %}
+
+{% block content %}
+{% include 'base/admin_header.html' %}
+<div class="form-container">
+    <h2>Update Farm</h2>
+    <form method="POST" enctype="multipart/form-data" class="update-farm-form">
+        {% csrf_token %}
+        {{ form.non_field_errors }}
+        <div class="form-group">
+            <label for="id_name">Name:</label>
+            {{ form.name }}
+            {{ form.name.errors }}
+        </div>
+        <div class="form-group">
+            <label for="id_location">Location:</label>
+            {{ form.location }}
+            {{ form.location.errors }}
+        </div>
+        <div class="form-group">
+            <label for="id_description">Description:</label>
+            {{ form.description }}
+            {{ form.description.errors }}
+        </div>
+        <div class="form-group">
+            <label for="id_contact">Contact:</label>
+            {{ form.contact }}
+            {{ form.contact.errors }}
+        </div>
+        <div class="form-group">
+            <label for="id_price_per_night">Price Per Night:</label>
+            {{ form.price_per_night }}
+            {{ form.price_per_night.errors }}
+        </div>
+        <div class="form-group">
+            <label for="id_available_from">Available From:</label>
+            {{ form.available_from }}
+            {{ form.available_from.errors }}
+        </div>
+        <div class="form-group">
+            <label for="id_available_to">Available To:</label>
+            {{ form.available_to }}
+            {{ form.available_to.errors }}
+        </div>
+        <div class="form-group">
+            <label for="id_images">Update Images:</label>
+            {{ form.images }}
+            {{ form.images.errors }}
+        </div>
+        <button type="submit">Update</button>
+    </form>
+</div>
+{% endblock %}

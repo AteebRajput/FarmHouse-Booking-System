@@ -1,0 +1,96 @@
+{% extends "base/base.html" %}
+
+{% block custom_css %}
+<style>
+.card-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px; /* Space between cards */
+    justify-content: center; /* Center align cards */
+}
+
+.card {
+    border: 1px solid #ccc;
+    padding: 16px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    flex: 1 1 calc(25% - 32px); /* Adjust the percentage for the number of cards per row */
+    box-sizing: border-box;
+    background-color: #fff; /* Card background color */
+    transition: transform 0.3s ease; /* Smooth transition on hover */
+    text-align: center; /* Center align text */
+}
+
+.card:hover {
+    transform: translateY(-5px); /* Lift card up on hover */
+}
+
+.card img {
+    width: 320px; /* Updated image width */
+    height: 200px; /* Fixed height */
+    object-fit: cover; /* Ensure the image covers the area and is cropped */
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+    display: block;
+    margin: 0 auto; /* Center the image */
+}
+
+.card-content {
+    padding: 16px;
+}
+
+.card h1 {
+    font-size: 18px;
+    margin: 8px 0;
+    color: #333; /* Title color */
+}
+
+.card .price {
+    color: #555;
+    font-size: 14px;
+}
+
+.card button {
+    background-color: #008cba;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease; /* Smooth transition on hover */
+}
+
+.card button:hover {
+    background-color: #005f5f;
+}
+
+a {
+    color: black;
+    text-decoration: none;
+}
+</style>
+{% endblock %}
+
+{% block content %}
+{% include 'base/admin_header.html' %}
+<h2 class="display-6 font-weight-bold my-4 text-center">Farms List</h2>
+<div class="card-container">
+    {% for farm_data in farms_with_images %}
+        <div class="card">
+            {% if farm_data.image %}
+                <img src="{{ farm_data.image }}" alt="{{ farm_data.farm.name }}">
+            {% endif %}
+            <div class="card-content">
+                <h1><a href="{% url 'admin_farm_detail' farm_data.farm.pk %}">{{ farm_data.farm.name }}</a></h1>
+                <p class="price">Price Per Night: {{ farm_data.farm.price_per_night }}</p>
+                <p>{{ farm_data.farm.description }}</p>
+                <p><a href="{% url 'admin_update_farm' farm_data.farm.pk %}"><button>Edit</button></a></p>
+                <form action="{% url 'admin_delete_farm' farm_data.farm.pk %}" method="POST" style="display: inline;">
+                    {% csrf_token %}
+                    <button type="submit">Delete</button>
+                </form>
+            </div>
+        </div>
+    {% endfor %}
+</div>
+{% endblock %}

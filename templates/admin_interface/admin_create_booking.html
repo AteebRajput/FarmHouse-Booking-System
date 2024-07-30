@@ -1,0 +1,27 @@
+<!-- admin_create_booking.html -->
+{% extends "base/base.html" %}
+
+{% block custom_css %}
+<style>
+    .booking-form {
+        max-width: 600px;
+        margin: 50px auto;
+        padding: 20px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        background-color: #f9f9f9;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+{% include 'base/admin_header.html' %}
+<div class="booking-form">
+    <h2>Create Booking</h2>
+    <form method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-primary">Create Booking</button>
+    </form>
+</div>
+{% endblock %}

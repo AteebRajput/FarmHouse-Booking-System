@@ -1,0 +1,33 @@
+{% extends "base/base.html" %}
+
+{% block content %}
+{% include 'base/admin_header.html' %}
+<div class="container mt-5">
+<h2 class="mb-4">Bookings</h2>
+<table class="table table-striped">
+  <thead class="thead-dark">
+    <tr>
+      <th scope="col">Farm</th>
+      <th scope="col">Check-in</th>
+      <th scope="col">Check-out</th>
+      <th scope="col">Order Status</th>
+      <th scope="col">Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for booking in bookings %}
+    <tr>
+      <td>{{ booking.farm.name }}</td>
+      <td>{{ booking.check_in }}</td>
+      <td>{{ booking.check_out }}</td>
+      <td>{{ booking.order_status }}</td>
+      <td>
+        <a href="{% url 'admin_cancel_booking' booking.pk %}" class="btn btn-danger">Cancel</a>
+
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+</div>
+{% endblock %}

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Book {{ farm.name }}</title>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const bookedDates = JSON.parse('{{ booked_dates|escapejs }}');
+            
+            function isDateBooked(date) {
+                const formattedDate = date.toISOString().split('T')[0];
+                return bookedDates.some(([start, end]) => {
+                    return formattedDate >= start && formattedDate <= end;
+                });
+            }
+            
+            const checkInInput = document.getElementById("id_check_in");
+            const checkOutInput = document.getElementById("id_check_out");
+            
+            checkInInput.addEventListener("change", function() {
+                if (isDateBooked(new Date(checkInInput.value))) {
+                    alert("This date is already booked. Please select another date.");
+                    checkInInput.value = '';
+                }
+            });
+            
+            checkOutInput.addEventListener("change", function() {
+                if (isDateBooked(new Date(checkOutInput.value))) {
+                    alert("This date is already booked. Please select another date.");
+                    checkOutInput.value = '';
+                }
+            });
+        });
+    </script>
+</head>
+<body>
+    <h2>Book {{ farm.name }}</h2>
+    <p>{{ farm.description }}</p>
+    <h3>Available from: {{ farm.available_from }} to: {{ farm.available_to }}</h3>
+    <h3>Book your stay</h3>
+    <form method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Book Farm</button>
+    </form>
+    <h3>Booked Dates</h3>
+    <ul>
+        {% for booking in bookings %}
+            <li>From: {{ booking.check_in }} To: {{ booking.check_out }}</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

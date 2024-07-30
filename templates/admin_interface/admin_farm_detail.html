@@ -1,0 +1,101 @@
+{% extends "base/base.html" %}
+
+{% block custom_css %}
+<style>
+    /* Add some basic styling to the page */
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f9f9f9;
+    }
+
+    /* Style the farm detail container */
+   .farm-detail-container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+        background-color: #fff;
+        border: 1px solid #ddd;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        border-radius: 10px;
+    }
+
+    /* Style the farm name */
+   .farm-detail-container h2 {
+        font-weight: bold;
+        color: #333;
+        margin-top: 0;
+    }
+
+    /* Style the farm description and details */
+   .farm-detail-container p {
+        font-size: 16px;
+        color: #666;
+        margin-bottom: 10px;
+    }
+
+    /* Style the image container */
+   .image-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-bottom: 20px;
+    }
+
+    /* Style the farm images */
+   .farm-image {
+        max-width: 200px;
+        height: auto;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Style the booking list */
+   .booking-list {
+        list-style-type: none;
+        padding: 0;
+        margin: 0;
+    }
+
+   .booking-list li {
+        margin-bottom: 10px;
+        padding: 10px;
+        border-bottom: 1px solid #ccc;
+    }
+
+   .booking-list li:last-child {
+        border-bottom: none;
+    }
+
+    /* Add some hover effects to the booking list items */
+   .booking-list li:hover {
+        background-color: #f7f7f7;
+        cursor: pointer;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+{% include 'base/admin_header.html' %}
+<div class="farm-detail-container">
+    </label></span><h2>{{ farm.name }}</h2>
+    <p>{{ farm.description }}</p>
+    <p>Location: {{ farm.location }}</p>
+    <p>Contact: {{ farm.contact }}</p>
+    <p>Price per Night: {{ farm.price_per_night }}</p>
+    <p>Available from: {{ farm.available_from }} to: {{ farm.available_to }}</p>
+
+    <h3>Images</h3>
+    <div class="image-container">
+        {% for image in images %}
+        <img src="{{ image.image.url }}" alt="Farm Image" class="farm-image">
+        {% endfor %}
+    </div>
+
+    <h3>Bookings</h3>
+    <ul class="booking-list">
+        {% for booking in bookings %}
+        <li>From: {{ booking.check_in }} To: {{ booking.check_out }}</li>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock %}

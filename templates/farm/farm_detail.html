@@ -1,0 +1,118 @@
+{% extends "base/base.html" %}
+
+{% block custom_css %}
+<style>
+    .farm-image {
+        width: 100%;
+        height: 300px;
+        object-fit: cover;
+        border-radius: 5px;
+    }
+    .booked-date {
+        background-color: #f8d7da;
+        border-color: #f5c6cb;
+        color: #721c24;
+        border-radius: 4px;
+        padding: 10px;
+    }
+    .form-group {
+        margin-bottom: 15px;
+    }
+    .book-form {
+        max-width: 600px;
+        margin: 0 auto;
+    }
+    .book-btn {
+        width: 100%;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1 class="text-center display-5 font-weight-bold text-dark">{{ farm.name }} Farm House</h1>
+
+    <div class="row">
+        <div class="col-md-6 mb-4">
+            <div class="card">
+                <div class="card-body">
+                    <h3 class="card-title">{{ farm.name }}</h3>
+                    <p class="card-text">{{ farm.description }}</p>
+                    <p class="card-text"><strong>Location:</strong> {{ farm.location }}</p>
+                    <p class="card-text"><strong>Price per night:</strong> ${{ farm.price_per_night }}</p>
+                    <p class="card-text"><strong>Available from:</strong> {{ farm.available_from }} <strong>to:</strong> {{ farm.available_to }}</p>
+                </div>
+                <div class="card-body">
+                    <h3 class="card-title">Images</h3>
+                    <div class="row">
+                        {% for image in images %}
+                        <div class="col-6 mb-2">
+                            <img src="{{ image.image.url }}" alt="{{ farm.name }}" class="farm-image">
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 mb-4">
+            <div class="card">
+                <div class="card-body">
+                    <h3 class="card-title">Book your stay</h3>
+                    <div class="book-form">
+                        <form method="POST" action="{% url 'book_farm' farm.id %}">
+                            {% csrf_token %}
+                            <div class="form-group">
+                                {{ form.check_in.label_tag }}
+                                {{ form.check_in }}
+                            </div>
+                            <div class="form-group">
+                                {{ form.check_out.label_tag }}
+                                {{ form.check_out }}
+                            </div>
+                            <button type="submit" class="btn btn-primary book-btn">Book Farm</button>
+                        </form>
+                    </div>
+                    <h3 class="mt-4">Booked Dates</h3>
+                    <ul class="list-group">
+                        {% for booking in bookings %}
+                        <li class="list-group-item booked-date">From: {{ booking.check_in }} To: {{ booking.check_out }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const bookedDates = JSON.parse('{{ booked_dates|escapejs }}');
+        
+        function isDateBooked(date) {
+            const formattedDate = date.toISOString().split('T')[0];
+            return bookedDates.some(([start, end]) => {
+                return formattedDate >= start && formattedDate <= end;
+            });
+        }
+        
+        const checkInInput = document.getElementById("id_check_in");
+        const checkOutInput = document.getElementById("id_check_out");
+        
+        checkInInput.addEventListener("change", function() {
+            if (isDateBooked(new Date(checkInInput.value))) {
+                alert("This date is already booked. Please select another date.");
+                checkInInput.value = '';
+            }
+        });
+        
+        checkOutInput.addEventListener("change", function() {
+            if (isDateBooked(new Date(checkOutInput.value))) {
+                alert("This date is already booked. Please select another date.");
+                checkOutInput.value = '';
+            }
+        });
+    });
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+{% endblock %}

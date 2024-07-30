@@ -1,0 +1,11 @@
+{% extends "base/base.html" %}
+
+{% block content %}
+{% include 'base/admin_header.html' %}
+<h2>Delete Farm</h2>
+<p>Are you sure you want to delete the farm "{{ farm.name }}"?</p>
+<form method="POST">
+    {% csrf_token %}
+    <button type="submit">Delete</button>
+</form>
+{% endblock %}
